@@ -1,18 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory, useParams } from 'react-router-dom'
+import styled from 'styled-components'
+// import './Detail.scss'
 
 function Detail(props) {
 
     let history = useHistory();
     // 방문 기록 등을 저장 해놓은 Object
-    let {id} = useParams();
+    let { id } = useParams();
     // -> {id : 1}
 
     // or let param = useParams();
     // -> {id : 1}
 
+    let [상태, 상태변경] = useState(true)
+    let [input, input변경] = useState('');
+
+    useEffect(() => {
+
+        // 2초 후에 alert 창을 안보이게 해주셈
+        let 타이머 = setTimeout(() => {
+            상태변경(false)
+        }, 2000)
+
+        return () => {
+            // unmount 때 실행할 코드
+            clearTimeout(타이머)
+        }
+    },[상태])
+
     return (
         <div className="container">
+            <박스>
+                <제목 className="red" 색상='red'>Detail</제목>
+                {/* or <제목 색상={'red'}>Detail</제목> */}
+                {input}
+                <input onChange={(e)=>{input변경(e.target.value)}}/>
+                {
+                    (상태 == true) ?
+                        (<div className="my-alert2">
+                            <p>재고가 얼마 남지 않았습니다.</p>
+                        </div>)
+                        :
+                        null
+                }
+            </박스>
             <div className="row">
                 <div className="col-md-6">
                     <img src="https://codingapple1.github.io/shop/shoes1.jpg" width="100%" />
@@ -23,7 +55,7 @@ function Detail(props) {
                     <p>{props.shoes[id].price}</p>
                     <button className="btn btn-danger">주문하기</button>
 
-                    <button className="btn btn-danger" onClick={()=>{
+                    <button className="btn btn-danger" onClick={() => {
                         history.push("/")
                         // or history.goBack()
                     }}>뒤로가기</button>
@@ -32,5 +64,14 @@ function Detail(props) {
         </div>
     );
 }
+
+const 박스 = styled.div`
+    padding : 20px;
+`;
+
+const 제목 = styled.h4`
+    font-size: 30px;
+    color : ${props => props.색상}
+`
 
 export default Detail;

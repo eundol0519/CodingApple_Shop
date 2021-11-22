@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import data from './data.js' // data.js를 import 한다.
 import Detail from './Detail.js'
