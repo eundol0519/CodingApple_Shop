@@ -15,6 +15,7 @@ function Detail(props) {
 
     let [상태, 상태변경] = useState(true)
     let [input, input변경] = useState('');
+    let [재고, 재고변경] = useState(props.info)
 
     useEffect(() => {
 
@@ -53,7 +54,12 @@ function Detail(props) {
                     <h4 className="pt-5">{props.shoes[id].title}</h4>
                     <p>{props.shoes[id].content}</p>
                     <p>{props.shoes[id].price}</p>
-                    <button className="btn btn-danger">주문하기</button>
+                    <p><Info info={재고[id]}></Info></p>
+                    <button className="btn btn-danger" onClick={()=> {
+                        const arr = [...재고]
+                        arr[id] -= 1;
+                        재고변경(arr)
+                    }}>주문하기</button>
 
                     <button className="btn btn-danger" onClick={() => {
                         history.push("/")
@@ -62,6 +68,12 @@ function Detail(props) {
                 </div>
             </div>
         </div>
+    );
+}
+
+function Info(props){
+    return(
+        <div>재고 : {props.info}</div>
     );
 }
 

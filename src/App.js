@@ -5,10 +5,14 @@ import Detail from './Detail.js'
 
 import { Navbar, Container, NavDropdown, Nav } from 'react-bootstrap';
 import { Link, Route, Switch } from 'react-router-dom'
+import axios from 'axios';
 
 function App() {
 
   let [shoes, shoes변경] = useState(data)
+  let [재고, 재고변경] = useState([10, 11, 12])
+  // 중요한 데이터는 상위 컴포넌트에 만들어 놓고
+  // 위에서 아래로 흐르는 게 좋음
 
   return (
     <div className="App">
@@ -39,9 +43,9 @@ function App() {
         </Container>
       </Navbar>
 
-      <Switch> 
-      {/* 여러 개가 일치해도 하나만 보여주세요! && 택 1 */}
-      {/* 중복 허용 X */}
+      <Switch>
+        {/* 여러 개가 일치해도 하나만 보여주세요! && 택 1 */}
+        {/* 중복 허용 X */}
         {/* 메인페이지 부분 */}
         <Route exact path="/">
           {/* jubmotron 부분 */}
@@ -62,6 +66,26 @@ function App() {
                 );
               })}
             </div>
+            <button className='btn btn-primary'
+              onClick={() => {
+
+                axios.get('https://codingapple1.github.io/shop/data2.json')
+                  .then((result) => { // 요청 성공 시 반환값을 인자(파라미터)로 받는다.
+                    // console.log(result.data)
+                    // Object 형식이 아니라, JSON 형식으로 결과값이 넘어옴
+                    shoes변경([...shoes, ...result.data])
+                    // shoes라는 state 변수에서 데이터를 관리하고 있기 떄문에 새배열을 만들어서 수정한다.
+                  })
+                  .catch(() => {
+                    console.log("실패")
+                  });
+
+                // axios.get(데이터 요청할 URL)
+                // 새로고침 없이 데이터를 가져옵니다.
+
+                // .then : ajax 요청 성공 시
+                // .catch : ajax 요청 실패 시
+              }}>더보기</button>
           </div>
         </Route>
 
@@ -72,7 +96,7 @@ function App() {
             1. 콜론 뒤에 맘대로 작명
             2. 여러개 사용가능 -> /detail/:id/:id2
            */}
-          <Detail shoes = {shoes}></Detail>
+          <Detail shoes={shoes} info={재고}></Detail>
         </Route>
       </Switch >
     </div>
